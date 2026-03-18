@@ -1,0 +1,12 @@
+{
+  "name": "improve-claude-md",
+  "description": "Rewrite a CLAUDE.md file using <important if> blocks to improve instruction adherence",
+  "version": "1.0.0",
+  "author": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "repository": "https://github.com/humanlayer/skills",
+  "license": "MIT",
+  "keywords": ["claude-md", "instructions", "important-if", "claude-code"]
+}

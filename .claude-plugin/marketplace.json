@@ -1,0 +1,26 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "skills",
+  "owner": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "metadata": {
+    "description": "Claude Code skills from HumanLayer",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "improve-claude-md",
+      "description": "Rewrite a CLAUDE.md file using <important if> blocks to improve instruction adherence",
+      "version": "1.0.0",
+      "author": {
+        "name": "humanlayer",
+        "email": "support@humanlayer.dev"
+      },
+      "source": "./plugins/improve-claude-md",
+      "category": "productivity",
+      "keywords": ["claude-md", "instructions", "important-if", "claude-code"]
+    }
+  ]
+}
