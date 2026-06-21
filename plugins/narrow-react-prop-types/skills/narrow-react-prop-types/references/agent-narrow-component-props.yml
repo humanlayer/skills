@@ -1,0 +1,290 @@
+# Agent React Component Props — automated prop type narrowing with AI-assisted fixes
+#
+# This workflow has two modes:
+# 1. scheduled/manual mode: create a fresh agent branch, run CodeLayer, and open a PR.
+# 2. /iterate mode: when a maintainer comments on an agent-created PR, update that PR
+#    and optionally update .github/agent-memory/narrow-component-props.md for future runs.
+#
+# The /iterate path intentionally checks the PR body marker BEFORE checkout/setup so
+# every agent workflow can listen for /iterate while non-matching workflows no-op cheaply.
+
+name: "Agent: Narrow React Component Props"
+
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      target_path:
+        description: "Specific React component path or package to inspect (optional)"
+        required: false
+        type: string
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: agent-react-component-props
+  cancel-in-progress: true
+
+jobs:
+  react-component-props:
+    # Run all non-comment events. For issue comments, only authorized PR comments
+    # starting with /iterate are allowed to reach the marker preflight below.
+    if: |
+      github.event_name != 'issue_comment' ||
+      (
+        github.event.issue.pull_request &&
+        startsWith(github.event.comment.body, '/iterate') &&
+        (github.event.comment.author_association == 'OWNER' ||
+         github.event.comment.author_association == 'MEMBER' ||
+         github.event.comment.author_association == 'COLLABORATOR')
+      )
+    runs-on: blacksmith-8vcpu-ubuntu-2404
+    steps:
+      - name: Check iterate marker
+        id: iterate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_URL: ${{ github.event.issue.pull_request.url }}
+          WORKFLOW_ID: agent-narrow-component-props
+        run: |
+          # Scheduled/manual runs are normal agent runs, so allow the rest of the job.
+          if [ "$EVENT_NAME" != "issue_comment" ]; then
+            echo "run_agent=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # /iterate comments are shared by all recurring agent workflows. The hidden
+          # PR body marker deterministically routes the comment to the workflow that
+          # originally opened the PR. Non-matching workflows exit before checkout/setup.
+          PR_DATA=$(gh api "$PR_URL")
+          BODY=$(echo "$PR_DATA" | jq -r '.body // ""')
+          if grep -Fq "<!-- codelayer-agent:workflow=$WORKFLOW_ID;" <<< "$BODY"; then
+            echo "run_agent=true" >> "$GITHUB_OUTPUT"
+            echo "number=$(echo "$PR_DATA" | jq -r '.number')" >> "$GITHUB_OUTPUT"
+            echo "head_ref=$(echo "$PR_DATA" | jq -r '.head.ref')" >> "$GITHUB_OUTPUT"
+            echo "head_sha=$(echo "$PR_DATA" | jq -r '.head.sha')" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_agent=false" >> "$GITHUB_OUTPUT"
+            echo "PR was not created by $WORKFLOW_ID; no-op."
+          fi
+
+      - uses: actions/checkout@v5
+        if: steps.iterate.outputs.run_agent == 'true' && github.event_name != 'issue_comment'
+        with:
+          fetch-depth: 0
+
+      - uses: actions/checkout@v5
+        if: steps.iterate.outputs.run_agent == 'true' && github.event_name == 'issue_comment'
+        with:
+          # Iteration updates the existing agent PR branch rather than creating a new one.
+          ref: ${{ steps.iterate.outputs.head_ref }}
+          fetch-depth: 0
+
+      - name: Configure git user & branch
+        if: steps.iterate.outputs.run_agent == 'true'
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != "issue_comment" ]; then
+            BRANCH="react-component-props-agent/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+            echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+            git checkout -b "$BRANCH"
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install bun
+        if: steps.iterate.outputs.run_agent == 'true'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Install Node.js
+        if: steps.iterate.outputs.run_agent == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Cache bun dependencies
+        if: steps.iterate.outputs.run_agent == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        if: steps.iterate.outputs.run_agent == 'true'
+        run: bun install --frozen-lockfile
+
+      - name: Run CodeLayer Agent to narrow React props
+        if: steps.iterate.outputs.run_agent == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_COLOR: "3"
+          TARGET_PATH: ${{ github.event.inputs.target_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.iterate.outputs.number }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          set -o pipefail
+
+          MEMORY_CONTENT="$(cat .github/agent-memory/narrow-component-props.md)"
+
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            # Build an iteration-specific prompt from PR body, comments, review comments,
+            # the triggering /iterate feedback, and the current workflow memory file.
+            bun ci-scripts/agent-iteration.ts \
+              --command prompt \
+              --workflow agent-narrow-component-props \
+              --memory .github/agent-memory/narrow-component-props.md \
+              --repo "$GITHUB_REPOSITORY" \
+              --pr-number "$PR_NUMBER" \
+              --comment-body "$COMMENT_BODY" > /tmp/codelayer-prompt.md
+
+            bunx @humanlayer/cli@latest codelayer \
+              --provider anthropic \
+              --model claude-opus-4-8 \
+              --thinking high \
+              --prompt "$(cat /tmp/codelayer-prompt.md)" \
+              2>&1 | tee /tmp/codelayer-output.txt
+
+            bun ci-scripts/codelayer-output.ts < /tmp/codelayer-output.txt > /tmp/pr-body.md
+            echo "PR_BODY_FILE=/tmp/pr-body.md" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          TARGET_INSTRUCTION=""
+          if [ -n "$TARGET_PATH" ]; then
+            TARGET_INSTRUCTION="
+
+          ## Target Request
+
+          The user requested this component path or package: $TARGET_PATH
+
+          Start there instead of picking a target automatically."
+          fi
+
+          PROMPT="$(cat <<EOF
+
+          # Context
+
+          You are narrowing React component prop types in this repository. Begin by using the \`narrow-react-prop-types\` skill.
+
+          # Scope
+
+          Focus only on React component props in \`apps/riptide-ui\`.
+
+          You may inspect \`packages/ui\` only when an \`apps/riptide-ui\` component imports a shared UI component and the type relationship is necessary to understand or validate the riptide-ui change.
+
+          # Instructions
+
+          1. Find components whose props are wider than their live non-test, non-Storybook call sites require.
+          2. Pick a small, reviewable set of high-confidence prop narrowing changes.
+          3. Use live product call sites as the source of truth, not stories, tests, mocks, or shell demos.
+          4. Prefer derived or reusable types when they match existing codebase conventions.
+          5. Do not combine this with React Doctor cleanup; this workflow is only for prop type narrowing.
+          6. Validate with typecheck and quality.
+          7. Commit and push your changes.
+
+          ## Validation Commands
+
+          \`\`\`bash
+          bun --bun run typecheck --filter @codelayer/riptide-ui
+          bun --bun run quality
+          \`\`\`
+
+          ## Important Rules
+
+          - Do not widen props only to satisfy stories or tests.
+          - Do not remove props until all live call sites prove they are unused.
+          - Do not make optional callbacks solely for story convenience.
+          - Do not run long integration tests.
+
+          ## Agent Memory
+
+          ${MEMORY_CONTENT}
+
+          ## Finishing Up
+
+          When you are finished:
+
+          1. Make sure the validation commands pass.
+          2. Commit and push your changes.
+          3. Answer with the output format below.
+
+          ## Output Format
+
+          Format your final answer as GitHub-flavored markdown:
+
+          \`\`\`
+          ## React Component Prop Narrowing Complete
+
+          ### Changes Made
+          - [component/file]: [what was narrowed and why]
+
+          ### Live Call Sites Checked
+          - [path]: [why it supports the narrower prop contract]
+
+          ### Validation
+          - [x] Typecheck passed
+          - [x] Quality checks passed
+          \`\`\`
+          ${TARGET_INSTRUCTION}
+          EOF
+          )"
+
+          bunx @humanlayer/cli@latest codelayer \
+            --provider anthropic \
+            --model claude-opus-4-8 \
+            --thinking high \
+            --prompt "$PROMPT" \
+            2>&1 | tee /tmp/codelayer-output.txt
+
+          bun ci-scripts/codelayer-output.ts < /tmp/codelayer-output.txt > /tmp/pr-body.md
+
+          echo "PR_BODY_FILE=/tmp/pr-body.md" >> "$GITHUB_ENV"
+
+      - name: Push and create PR
+        if: steps.iterate.outputs.run_agent == 'true' && github.event_name != 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet origin/main...HEAD; then
+            echo "No commits were created by the agent; skipping PR creation."
+            exit 0
+          fi
+
+          git push --set-upstream origin ${{ env.BRANCH }}
+          # Add the visible /iterate instructions and hidden workflow marker to the PR body.
+          bun ci-scripts/agent-iteration.ts --command footer --workflow agent-narrow-component-props --memory .github/agent-memory/narrow-component-props.md >> "$PR_BODY_FILE"
+          gh pr create --title "[$(date +%m/%d)] React Component Prop Narrowing" --body-file "$PR_BODY_FILE"
+
+      - name: Push iteration changes and comment
+        if: steps.iterate.outputs.run_agent == 'true' && github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git diff --quiet HEAD; then
+            git add -A
+            git commit -m "chore: iterate narrow props agent feedback"
+            git push origin HEAD:${{ steps.iterate.outputs.head_ref }}
+          fi
+
+          gh pr comment ${{ steps.iterate.outputs.number }} --body-file "$PR_BODY_FILE"
+
+      - name: Upload agent output
+        if: always() && steps.iterate.outputs.run_agent == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-output
+          path: /tmp/codelayer-output.txt

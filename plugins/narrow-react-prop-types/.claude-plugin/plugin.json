@@ -1,0 +1,12 @@
+{
+  "name": "narrow-react-prop-types",
+  "description": "Narrow React component prop types to match live code paths",
+  "version": "1.0.0",
+  "author": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "repository": "https://github.com/humanlayer/skills",
+  "license": "MIT",
+  "keywords": ["react", "typescript", "props", "components", "claude-code"]
+}

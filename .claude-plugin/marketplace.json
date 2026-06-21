@@ -21,6 +21,30 @@
       "source": "./plugins/improve-claude-md",
       "category": "productivity",
       "keywords": ["claude-md", "instructions", "important-if", "claude-code"]
+    },
+    {
+      "name": "narrow-react-prop-types",
+      "description": "Narrow React component prop types to match live code paths",
+      "version": "1.0.0",
+      "author": {
+        "name": "humanlayer",
+        "email": "support@humanlayer.dev"
+      },
+      "source": "./plugins/narrow-react-prop-types",
+      "category": "productivity",
+      "keywords": ["react", "typescript", "props", "components", "claude-code"]
+    },
+    {
+      "name": "build-ci-loops-skill",
+      "description": "Build a Claude skill plus a CI loop with a CodeLayer workflow, prompt, and memory file",
+      "version": "1.0.0",
+      "author": {
+        "name": "humanlayer",
+        "email": "support@humanlayer.dev"
+      },
+      "source": "./plugins/build-ci-loops-skill",
+      "category": "productivity",
+      "keywords": ["ci-loops", "codelayer", "github-actions", "skills", "claude-code"]
     }
   ]
 }
