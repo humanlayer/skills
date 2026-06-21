@@ -23,3 +23,31 @@ Then in your project:
 ```
 /improve-claude-md
 ```
+
+### narrow-react-prop-types
+
+Narrows React component prop types to match live code paths instead of Storybook, test, or mock-only states.
+
+```bash
+npx skills add humanlayer/skills --skill narrow-react-prop-types
+```
+
+Then in your project:
+
+```
+/narrow-react-prop-types
+```
+
+### build-ci-loops-skill
+
+Builds a Claude skill plus a CI loop with a CodeLayer GitHub Actions workflow, prompt, memory file, and reference templates.
+
+```bash
+npx skills add humanlayer/skills --skill build-ci-loops-skill
+```
+
+Then in your project:
+
+```
+/build-ci-loops-skill
+```
