@@ -38,16 +38,16 @@ Then in your project:
 /narrow-react-prop-types
 ```
 
-### build-ci-loops-skill
+### build-iterated-agentic-loop
 
-Builds a Claude skill plus a CI loop with a CodeLayer GitHub Actions workflow, prompt, memory file, and reference templates.
+Builds a repo-local skill plus an iterated coding-agent GitHub Actions workflow, prompt, memory file, and reference templates.
 
 ```bash
-npx skills add humanlayer/skills --skill build-ci-loops-skill
+npx skills add humanlayer/skills --skill build-iterated-agentic-loop
 ```
 
 Then in your project:
 
 ```
-/build-ci-loops-skill
+/build-iterated-agentic-loop
 ```

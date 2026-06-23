@@ -1,0 +1,12 @@
+{
+  "name": "build-iterated-agentic-loop",
+  "description": "Build a repo-local skill plus an iterated coding-agent workflow, prompt, and memory file",
+  "version": "1.0.0",
+  "author": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "repository": "https://github.com/humanlayer/skills",
+  "license": "MIT",
+  "keywords": ["iterated-agentic-loop", "coding-agents", "github-actions", "skills", "claude-code"]
+}

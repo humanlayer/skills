@@ -21,7 +21,7 @@ The goal is to make component types describe the real live-code-path contract, t
 
 ## Workflow
 
-For an example recurring GitHub Actions workflow that runs this skill through CodeLayer, see `references/agent-narrow-component-props.yml`. Its example agent memory file is `references/narrow-component-props-memory.md`. For CI agent response formatting, see `references/response-template.md`.
+For an example recurring GitHub Actions workflow that runs this skill through CodeLayer, see `references/agent-narrow-component-props.yml`. Its example agent memory file is `references/narrow-component-props-memory.md`.
 
 ### 1. Identify the suspect component
 
@@ -146,17 +146,8 @@ Use repository-specific validation commands when available. In this monorepo, pr
 bun --bun run typecheck --filter <package>
 ```
 
-### 11. Format the response
-
-When running as a CI agent, format your final response according to `references/response-template.md`. This response becomes the PR body.
-
-Include:
-- Summary of how many components were narrowed
-- Table of changes with rationale
-- Live call sites that justify each narrowing
-- Support code (stories/tests) that needed updating
-- Validation results
-- Risk assessment
+### 11. Read the response template and format your final asnwer
+Read the response template at `references/final-response-template.md` and format your answer accordingly.
 
 ## Review Checklist
 
