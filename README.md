@@ -51,3 +51,17 @@ Then in your project:
 ```
 /build-iterated-agentic-loop
 ```
+
+### design-control-loop
+
+Interviews you to design an agentic control loop — sensor, controller, actuator, and disturbances — tailored to your codebase, then builds it as locally-runnable components plus a scheduled coding-agent workflow.
+
+```bash
+npx skills add humanlayer/skills --skill design-control-loop
+```
+
+Then in your project:
+
+```
+/design-control-loop
+```

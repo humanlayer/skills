@@ -1,0 +1,12 @@
+{
+  "name": "design-control-loop",
+  "description": "Interview the user to design an agentic control loop (sensor, controller, actuator under disturbances) for their codebase, then build it as locally-runnable components plus a scheduled coding-agent workflow",
+  "version": "1.0.0",
+  "author": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "repository": "https://github.com/humanlayer/skills",
+  "license": "MIT",
+  "keywords": ["control-loop", "control-theory", "sensor-controller-actuator", "iterated-agentic-loop", "coding-agents", "github-actions", "skills", "claude-code"]
+}
