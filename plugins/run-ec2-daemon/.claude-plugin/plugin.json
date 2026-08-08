@@ -1,0 +1,12 @@
+{
+  "name": "run-ec2-daemon",
+  "description": "Create and verify an exploratory HumanLayer daemon host on EC2",
+  "version": "1.0.0",
+  "author": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "repository": "https://github.com/humanlayer/skills",
+  "license": "MIT",
+  "keywords": ["aws", "ec2", "daemon", "systemd", "humanlayer"]
+}

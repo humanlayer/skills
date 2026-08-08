@@ -21,6 +21,18 @@
       "source": "./plugins/improve-claude-md",
       "category": "productivity",
       "keywords": ["claude-md", "instructions", "important-if", "claude-code"]
+    },
+    {
+      "name": "run-ec2-daemon",
+      "description": "Create and verify an exploratory HumanLayer daemon host on EC2",
+      "version": "1.0.0",
+      "author": {
+        "name": "humanlayer",
+        "email": "support@humanlayer.dev"
+      },
+      "source": "./plugins/run-ec2-daemon",
+      "category": "development",
+      "keywords": ["aws", "ec2", "daemon", "systemd", "humanlayer"]
     }
   ]
 }
