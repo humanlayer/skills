@@ -58,9 +58,52 @@ For private AWS access through an SSM bastion, prefer `AWS-StartPortForwardingSe
 
 ## Authenticate HumanLayer
 
-Run `humanlayer login` as the same unprivileged user that will run the daemon. For remote device login, keep the command alive in `tmux` while the user opens the URL and enters the code.
+Before starting any login flow, show the user this warning:
+
+> [!WARNING]
+> These login flows put credentials on the EC2 host. Anyone who can access the host or its disks may be able to use them. It is on you to control access, rotate credentials, and remove them when you no longer need the host. Never create an image or snapshot after login.
+
+Wait for the user to confirm before starting the login flows.
+
+Run each login as the same unprivileged user that will run the daemon. Use a separate `tmux` session so each command stays open while the user completes the browser flow.
+
+For HumanLayer:
+
+```bash
+tmux new-session -d -s humanlayer-login 'humanlayer login 2>&1 | tee /tmp/humanlayer-login.log'
+tmux capture-pane -pt humanlayer-login
+```
+
+Give the user the displayed URL and code. Check the session after the user authenticates. If the command asks the user to select an organization, show the choices and ask which one to use before entering it.
 
 Do not use `--launch-token` for the systemd service. Launch-token credentials last only for one daemon process and cannot authenticate a later service restart.
+
+## Authenticate session tools
+
+Ask which session tools the user needs. Do not install or authenticate tools they did not request.
+
+For GitHub CLI:
+
+```bash
+tmux new-session -d -s gh-login 'gh auth login 2>&1 | tee /tmp/gh-login.log'
+tmux capture-pane -pt gh-login
+```
+
+For Claude Code:
+
+```bash
+tmux new-session -d -s claude-login 'claude /login 2>&1 | tee /tmp/claude-login.log'
+tmux capture-pane -pt claude-login
+```
+
+For Codex:
+
+```bash
+tmux new-session -d -s codex-login 'humanlayer agents auth codex 2>&1 | tee /tmp/codex-login.log'
+tmux capture-pane -pt codex-login
+```
+
+Give the user each browser URL and device code. If a flow returns a code that must be pasted into the waiting command, ask the user for that code and enter it into the matching `tmux` session. Do not print saved tokens or read credential files. After each flow, use the tool's status command to confirm login without exposing secret values.
 
 ## Install the user service
 
