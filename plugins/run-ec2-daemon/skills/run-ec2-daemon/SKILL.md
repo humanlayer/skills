@@ -172,4 +172,6 @@ Report:
 - all created resources and likely ongoing costs;
 - cleanup commands or steps.
 
+Ask the user to open the HumanLayer app or [app.humanlayer.com](https://app.humanlayer.com), start a new session, and confirm that the new host is available in the host selector. If it is missing, check the service state and journal before finishing.
+
 Repeat that this is an exploratory setup and the user owns host security, updates, monitoring, costs, credential rotation, and cleanup.
