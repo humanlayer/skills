@@ -43,6 +43,16 @@ src/
 └── transport/      # sends API requests
 ```
 
+- Show a system whose real shape is not a list — parts nested inside other parts, siblings that run in parallel, a shared layer everything draws on — as a topology, not a linear stack or tree. A stack implies a top-to-bottom order that often is not real; draw the actual containment, parallelism, and shared foundations instead. Sketch it in text, render it with a Mermaid `subgraph`, or — when filled regions and nested boxes carry the point — a focused HTML file (below):
+
+```text
+platform
+  control-plane ── wraps ──┐
+    seam ───────────────────┤   one contract
+    brain: [ provider A │ provider B ]   ← parallel, not stacked
+  services ── shared foundation every layer draws on
+```
+
 - Show component interaction, control flow, or data flow with Mermaid:
 
 ```mermaid
@@ -118,6 +128,13 @@ function expandSkill(command: string): string {
 
 ```
 Bash(open path/to/show-me-{description}.html)
+```
+
+- Use color to carry meaning, not decoration. When a view has categories — layers, modules, owners, states — give each its own hue and keep it consistent across every view on the page, so the same thing is the same color everywhere. Flat black-on-white reads as unfinished. Tree, diff, and HTML views pick up color for free; Mermaid defaults to gray, so color its nodes with `classDef` + `class` (and `style` for a `subgraph`) to match:
+
+```
+classDef svc fill:#6a4f8f,stroke:#513b6d,color:#fff;
+class LogGw,ModelGw,ToolGw svc;
 ```
 
 - Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question.
