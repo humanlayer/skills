@@ -36,7 +36,7 @@
     },
     {
       "name": "build-iterated-agentic-loop",
-      "description": "Build a repo-local skill plus an iterated coding-agent workflow, prompt, and memory file",
+      "description": "Turn an already-defined repeatable task into a repo-local skill and iterated coding-agent workflow",
       "version": "1.0.0",
       "author": {
         "name": "humanlayer",
@@ -48,7 +48,7 @@
     },
     {
       "name": "design-control-loop",
-      "description": "Interview the user to design an agentic control loop (sensor, controller, actuator under disturbances), then build it as locally-runnable components plus a scheduled coding-agent workflow",
+      "description": "Define a measurable goal, checker, and next-change selector, then build the resulting coding-agent loop",
       "version": "1.0.0",
       "author": {
         "name": "humanlayer",
@@ -56,7 +56,7 @@
       },
       "source": "./plugins/design-control-loop",
       "category": "productivity",
-      "keywords": ["control-loop", "control-theory", "sensor-controller-actuator", "iterated-agentic-loop", "coding-agents", "github-actions", "skills", "claude-code"]
+      "keywords": ["control-loop", "goal-checker-selector", "iterated-agentic-loop", "coding-agents", "github-actions", "skills", "claude-code"]
     },
     {
       "name": "show-me",

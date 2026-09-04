@@ -10,7 +10,7 @@ You may inspect `<secondary path>` only when it is necessary to understand or va
 
 # Instructions
 
-1. <Work the target(s) the controller selected (see "Selected work" if present); otherwise find high-confidence targets yourself.>
+1. <Work the target(s) the selector chose (see "Selected work" if present); otherwise find high-confidence targets yourself.>
 2. <Keep this to one small, reviewable increment.>
 3. <Use the real source of truth, not support-only examples.>
 4. <Avoid adjacent cleanup that belongs to another workflow.>
