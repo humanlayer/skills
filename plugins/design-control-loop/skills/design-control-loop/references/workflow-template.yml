@@ -1,8 +1,8 @@
 # Agent <Task Title> - iterated control loop
 #
 # This workflow has two modes:
-# 1. scheduled/manual mode: run one sense -> control -> actuate iteration on a fresh agent
-#    branch and open a PR. When sensor/controller/actuator are fused, collapse them to one step.
+# 1. scheduled/manual mode: run one check -> select -> change iteration on a fresh agent
+#    branch and open a PR. When checker/selector/agent responsibilities are combined, collapse them to one step.
 # 2. /iterate mode: when a maintainer comments on an agent-created PR, update that PR
 #    and optionally update .github/agent-memory/<task-slug>.md for future runs.
 #
@@ -135,8 +135,8 @@ jobs:
         run: bun install --frozen-lockfile
 
       # --- Iteration path: a /iterate comment refines the existing PR ---
-      # Iteration is one actuator pass over reviewer feedback, not a fresh sense->control->actuate cycle.
-      - name: Actuator — iterate on feedback
+      # Iteration is one agent pass over reviewer feedback, not a fresh check->select->change cycle.
+      - name: Agent — iterate on feedback
         if: steps.agent_gate.outputs.run_agent == 'true' && github.event_name == 'issue_comment'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -166,30 +166,30 @@ jobs:
           # NOTE: replace with agent-specific extraction from references/agent-runner-templates.md
           cat /tmp/agent-output.txt | sed 's/\x1b\[[0-9;]*m//g' > /tmp/pr-body.md
 
-      # --- Scheduled / manual path: one sense -> control -> actuate iteration ---
-      # If your sensor and controller are fused into the agent (or into one tool), collapse
-      # the next three steps into a single Actuator step — do not invent separation you don't have.
+      # --- Scheduled / manual path: one check -> select -> change iteration ---
+      # If your checker and selector are combined with the agent (or with one tool), collapse
+      # the next three steps into a single Agent step — do not invent separation you don't have.
 
-      - name: Sensor — measure current state
+      - name: Checker — measure current state
         if: steps.agent_gate.outputs.run_agent == 'true' && github.event_name != 'issue_comment'
         run: |
-          # Run the sensor you designed and write a stable, normalized measurement.
-          # Replace with your sensor (lint / AST search / type-check / tests / telemetry / script / agent).
+          # Run the checker you designed and write a stable, normalized report.
+          # Replace with your checker (lint / AST search / type-check / tests / telemetry / script / agent).
           # Example shape:
-          #   <sensor command> > /tmp/sensor-output.json
-          echo "TODO: run the sensor and write /tmp/sensor-output.json"
+          #   <checker command> > /tmp/checker-output.json
+          echo "TODO: run the checker and write /tmp/checker-output.json"
 
-      - name: Controller — select the next increment
+      - name: Selector — choose the next increment
         if: steps.agent_gate.outputs.run_agent == 'true' && github.event_name != 'issue_comment'
         run: |
-          # Consume /tmp/sensor-output.json and choose what to change this run, within scope
+          # Consume /tmp/checker-output.json and choose what to change this run, within scope
           # and batch size. Deterministic example: sort findings and take the top N.
-          # If the agent itself is the controller, delete this step.
+          # If the agent itself chooses the target, delete this step.
           # Example shape:
-          #   <controller command> /tmp/sensor-output.json > /tmp/controller-output.md
-          echo "TODO: select target(s) and write /tmp/controller-output.md"
+          #   <selector command> /tmp/checker-output.json > /tmp/selector-output.md
+          echo "TODO: select target(s) and write /tmp/selector-output.md"
 
-      - name: Actuator — run the coding agent
+      - name: Agent — apply the selected change
         if: steps.agent_gate.outputs.run_agent == 'true' && github.event_name != 'issue_comment'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -198,14 +198,14 @@ jobs:
         run: |
           set -o pipefail
           MEMORY_CONTENT="$(cat .github/agent-memory/<task-slug>.md)"
-          CONTROLLER_OUTPUT="$(cat /tmp/controller-output.md 2>/dev/null || true)"
+          SELECTOR_OUTPUT="$(cat /tmp/selector-output.md 2>/dev/null || true)"
 
           PROMPT="$(cat <<EOF
           <paste prompt-template.md here and replace placeholders>
 
-          ## Selected work (controller output)
+          ## Selected work (selector output)
 
-          $CONTROLLER_OUTPUT
+          $SELECTOR_OUTPUT
 
           ## Agent Memory
 

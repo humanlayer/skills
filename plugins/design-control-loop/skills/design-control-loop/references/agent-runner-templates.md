@@ -4,11 +4,11 @@ Use one of these inside the workflow's agent run step. Broad permission modes ar
 
 Each agent outputs differently, so response extraction varies. The goal is to get the agent's final formatted response into `/tmp/pr-body.md` for the PR body.
 
-**Run the actuator locally before wiring CI.** Every command below is a headless CLI invocation — export the agent's secret and set `PROMPT`, then run it in your shell against a controller-selected target to confirm the actuator works before it goes into a workflow:
+**Run the agent locally before wiring CI.** Every command below is a headless CLI invocation — export the agent's secret and set `PROMPT`, then run it in your shell against a selector-chosen target to confirm the agent works before it goes into a workflow:
 
 ```bash
 export ANTHROPIC_API_KEY=...         # or the agent's secret
-PROMPT="$(cat /tmp/agent-prompt.md)" # your assembled actuator prompt
+PROMPT="$(cat /tmp/agent-prompt.md)" # your assembled coding-agent prompt
 # then run the agent command for your chosen agent, below
 ```
 

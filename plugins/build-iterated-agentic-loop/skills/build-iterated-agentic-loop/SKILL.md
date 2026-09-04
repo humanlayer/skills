@@ -1,11 +1,13 @@
 ---
 name: build-iterated-agentic-loop
-description: build a repo-local skill and install a matching iterated coding-agent GitHub Actions workflow, prompt, memory file, and reference templates
+description: turn an already-defined repeatable task, scope, and validation into a repo-local skill plus an iterated coding-agent GitHub Actions workflow, prompt, memory file, and reference templates; use design-control-loop first when the goal or selection policy still needs discovery
 ---
 
 # Build Iterated Agentic Loop
 
 Use this skill when the user wants to turn a repeatable agent task into a repo-local skill plus a GitHub Actions workflow that runs a coding agent on a schedule, manually, or both.
+
+This is the implementation-first option: use it when the task, allowed scope, and proof of success are already understood. If the user still needs to discover what to measure or how each run should choose its next small change, use `design-control-loop` instead; that skill performs the design work before building similar automation.
 
 The target shape is an iterated agentic loop: a focused skill defines the agent's judgement, a workflow invokes a coding agent with a repo-specific prompt, an agent-memory file carries standing feedback between runs, and each workflow labels its PRs so only one open PR exists per loop. The `narrow-react-prop-types` skill is the concrete reference pattern.
 
