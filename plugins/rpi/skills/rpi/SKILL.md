@@ -50,6 +50,8 @@ Before writing artifacts, check `git check-ignore --quiet --no-index -- .agents/
 
 For research, load the research-questions document as the task context. For other steps, load the task directory's frontmatter-bearing workflow documents. Read supporting images, mockups, and diagrams as needed. Run the design interview in the main conversation, with the saved research as context.
 
+Workflow document frontmatter includes `repos`, a list of zero or more repositories with `identifier` and `sha` for each entry. Use `repos: []` when none apply.
+
 ## Suggest the Next Step
 
 Users run each phase in a separate context window by default. End with a suggested `/rpi` command that includes the task directory and chosen flow. Say they can run it here, after compaction, or in a new session.
