@@ -1,0 +1,20 @@
+{
+  "name": "rpi",
+  "description": "Research a change, work through its design, and implement it with reviewable local documents",
+  "version": "1.0.0",
+  "author": {
+    "name": "humanlayer",
+    "email": "support@humanlayer.dev"
+  },
+  "repository": "https://github.com/humanlayer/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "agents": [
+    "./agents/codebase-locator.md",
+    "./agents/codebase-analyzer.md",
+    "./agents/codebase-pattern-finder.md",
+    "./agents/web-search-researcher.md",
+    "./agents/outline-implementer-agent.md"
+  ],
+  "keywords": ["research", "design", "implementation", "skills"]
+}

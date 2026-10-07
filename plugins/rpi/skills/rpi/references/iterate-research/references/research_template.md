@@ -1,8 +1,8 @@
 ---
-date: <Current date and time with timezone>
+date: <Research date and time with timezone>
 repos:
   - identifier: "<Repository identifier>"
-    sha: <Current commit hash>
+    sha: <Commit SHA>
 topic: "<Research topic>"
 type: research
 tags: [research, <relevant areas>]
@@ -13,7 +13,7 @@ status: complete
 
 ## Research Question
 
-<Original direct question, or a numbered list of questions from the research-questions document.>
+<Original question or questions, including additions from the user's feedback.>
 
 ## Research Methodology
 
@@ -21,13 +21,13 @@ This document describes the current system using facts from code, tests, and ava
 
 ## Summary
 
-<Two to four focused paragraphs explaining the main findings, relationships, and data flows.>
+<Focused paragraphs explaining the main findings, relationships, and data flows.>
 
 ## Detailed Findings
 
 ### 1. <Header That States What Is True About This Concept>
 
-<Explain current behavior with file and line citations. Organize by concept and show how the parts connect. Use tables, Mermaid diagrams, call trees, file trees, component trees, signatures, contracts, and pseudocode as useful. Place each view beside its explanation.>
+<Explain current behavior with file and line citations. Organize by concept and show how the parts connect. Place useful diagrams, tables, trees, signatures, contracts, and pseudocode beside the explanation.>
 
 #### Testing Patterns
 
@@ -39,11 +39,11 @@ This document describes the current system using facts from code, tests, and ava
 
 ## Code References
 
-<Group the relevant files and directories by area, describe their roles, and state whether coverage is exhaustive or covers key files.>
+<Group relevant files and directories by area, describe their roles, and state the coverage of the list.>
 
 ## Architecture Documentation
 
-<Explain the architectural patterns and conventions, how components compose, and how data flows between them.>
+<Explain patterns, conventions, component interactions, and data flows.>
 
 ## Open Questions
 

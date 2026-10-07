@@ -50,15 +50,9 @@ The user can start at any step. After research or any design step, they can choo
 | Outline | Ordered phases, each with a testable result, affected files, and checks | The user reviews the scope and phase order |
 | Implementation | Code and tests based on the agreed documents | Checks and user testing confirm the result |
 
-Research describes current behavior. Design uses those facts to discuss the desired behavior. Design interviews ask one question at a time and record settled choices in the document.
-
-An outline divides work into small, testable results. For example, one phase may serve fixed API data, and another may connect that same path to stored data. Each phase ends with something the user can run, see, or query.
-
-Implementation reads the available workflow documents. With an outline, it records progress there and pauses between phases by default for user testing. Follow requests to run several or all phases together. Direct implementation completes the change in one run. When the change is ready for a pull request, suggest `/visual-pr`.
-
 ## Documents Carry Context Between Sessions
 
-Use a separate context window for each phase by default. Save the current decisions in the document before handing off. Each next command includes the task directory and chosen flow, for example:
+Use a separate context window for each phase by default. Save current decisions, user approvals, and unfinished questions in the document before handing off. Each next command includes the task directory and chosen flow, for example:
 
 ```text
 /rpi research .agents/artifacts/task-retries; next: PRD then TDD
@@ -72,13 +66,3 @@ The user can also continue here or compact before running the next command. Feed
 ```text
 /rpi update the TDD .agents/artifacts/task-retries to use the existing worker queue
 ```
-
-Number new workflow documents using the next available `NN-` prefix in the task directory. Keep the existing path when updating a document. Mockups and diagrams sit beside the documents and use ordinary local links.
-
-For implementation decisions, use this document precedence when they disagree:
-
-```text
-outline > TDD > PRD > design discussion > research > original request
-```
-
-Use live code as the source of truth for current behavior, and the user's latest instructions for changes to the agreed result.

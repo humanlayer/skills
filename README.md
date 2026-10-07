@@ -10,6 +10,25 @@ npx skills add humanlayer/skills --skill SKILLNAME
 
 ## Available Skills
 
+### rpi
+
+Researches a change, works through design choices with you, and implements it from local documents. Choose design discussion, PRD followed by TDD, technical design, or research followed by implementation. Each phase works in a fresh session by default.
+
+```bash
+npx skills add humanlayer/skills --skill rpi
+```
+
+Then invoke `/rpi` with your task, or request a step directly:
+
+```text
+/rpi research how the collections connect to the database
+/rpi make a PRD
+/rpi what's next .agents/artifacts/my-change
+/rpi implement .agents/artifacts/my-change
+```
+
+In Codex, use `$rpi` instead of `/rpi`, for example `$rpi research how the collections connect to the database`. Its default sandbox can make `.agents` read-only; grant the session write access to `.agents/artifacts`, or pass a writable task directory such as `artifacts/my-change`. RPI asks before changing a blocked destination.
+
 ### show-me
 
 Explains the current topic with concise diagrams, code-shape sketches, and focused HTML artifacts.

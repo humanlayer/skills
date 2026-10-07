@@ -21,6 +21,8 @@ Do lightweight research to locate the relevant code and understand the request. 
 
 If an Explore agent/tool is available, you can use that too.
 
+Use available web or library-documentation tools for external questions. When web access is unavailable, note that limit and continue with code and local documentation.
+
 Keep this pass small; the next research session does the full investigation.
 
 ## 3. Draft Current-State Questions
@@ -35,10 +37,16 @@ For frontend work, include the existing design system: components, colors and he
 
 ## 4. Read the Template and Save the Questions
 
-After reading the request and checking the context, read `$SKILLBASE/references/create-research-questions/references/research_questions_template.md`. Use it to write `NN-research-questions-<description>.md` in the selected task directory, using the next available number and a short kebab-case description.
+After reading the request and checking the context, read `$SKILLBASE/references/create-research-questions/references/research_questions_template.md`. When starting a change, also read `$SKILLBASE/references/create-research-questions/references/request_template.md` and save the original request in `NN-request-<description>.md` for later design and implementation sessions. Keep the user's desired result and exact source pointers there.
 
-Include context pointers when the request supplies them. Keep the questions self-contained so the research session can use this document as its task context. Do not include context about the task the user shared with you in the document, so a research agent can remain objective in its search.
+Write `NN-research-questions-<description>.md` in the selected task directory, using the next available number and a short kebab-case description.
+
+Include context pointers when the request supplies them. Give the research session self-contained, neutral questions and concrete source pointers; keep the desired change in the separate request document so research stays objective.
 
 ## 5. Read the Final-Answer Template and Respond
 
 Read `$SKILLBASE/references/create-research-questions/references/research_questions_final_answer.md` and respond using that template, filling in the saved file path, task directory, and chosen flow.
+
+Offer to open the document for review in VS Code, Cursor, or the user's preferred editor or browser.
+
+Finish this phase with the saved questions and suggested research command, then wait for the user's request to begin research.

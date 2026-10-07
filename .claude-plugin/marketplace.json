@@ -11,6 +11,18 @@
   },
   "plugins": [
     {
+      "name": "rpi",
+      "description": "Research a change, work through its design, and implement it with reviewable local documents",
+      "version": "1.0.0",
+      "author": {
+        "name": "humanlayer",
+        "email": "support@humanlayer.dev"
+      },
+      "source": "./plugins/rpi",
+      "category": "productivity",
+      "keywords": ["research", "design", "implementation", "skills"]
+    },
+    {
       "name": "improve-claude-md",
       "description": "Rewrite a CLAUDE.md file using <important if> blocks to improve instruction adherence",
       "version": "1.0.0",
