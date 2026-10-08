@@ -12,17 +12,23 @@ Show this plain-text chart with boxes and connecting lines when asking the user 
        │    ┌──────────────────────┐
        ├───▶│ 1. Design discussion │───┐
        │    └──────────────────────┘   │
-       │    ┌────────┐    ┌─────┐      │    ┌────────────┐
-       ├───▶│ 2. PRD │───▶│ TDD │──────┼───▶│  Outline   │
-       │    └────────┘    └─────┘      │    │ (optional) │
-       │    ┌────────┐                 │    └─────┬──────┘
-       ├───▶│ 3. TDD │─────────────────┘          │
-       │    └────────┘                            ▼
+       │    ┌────────┐    ┌─────┐      │
+       ├───▶│ 2. PRD │───▶│ TDD │──────┤
+       │    └────┬───┘    └─────┘      │
+       │         └─────────────────────┤
+       │    ┌────────┐                 │
+       ├───▶│ 3. TDD │─────────────────┤
+       │    └────────┘                 │    ┌────────────┐
+       │                               ├───▶│  Outline   │
+       │                               │    │ (optional) │
+       │                               │    └─────┬──────┘
+       │                               └──────────┤
+       │                                          ▼
        │      4. Research only             ┌─────────────┐
        └──────────────────────────────────▶│  Implement  │
                                            └─────────────┘
 ```
 
-The outline is optional. The user can also skip design steps or start at a later phase.
+Design discussion, PRD, and TDD can each lead to an outline or straight to implementation. A PRD can also lead to TDD. The user can start at any phase.
 
 Briefly recommend a flow based on the request, then ask which they prefer. Use box-drawing glyphs, not Mermaid.
