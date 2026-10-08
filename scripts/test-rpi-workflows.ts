@@ -184,6 +184,8 @@ await test('flow-choice', async () => {
   assert.match(first.messages, /design discussion/i)
   assert.match(first.messages, /PRD/)
   assert.match(first.messages, /TDD/)
+  assert.match(first.messages, /```(?:text)?\n[\s\S]*->[\s\S]*```/, 'Flow choice did not include an ASCII chart')
+  assert.ok(!first.messages.includes('```mermaid'), 'Flow choice used Mermaid instead of ASCII')
   await turn(cwd, 'Use the TDD flow.', 'questions', first.thread)
   const saved = report(cwd, 'research-questions')
   assert.equal(saved.metadata.flow, 'tdd')

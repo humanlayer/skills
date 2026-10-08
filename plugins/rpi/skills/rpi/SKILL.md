@@ -17,6 +17,8 @@ Follow the user's requested step. Read `$SKILLBASE/references/workflow.md` when 
 
 For a task description with no requested step, start with research questions. Ask which flow the user wants: research followed by design discussion, PRD, or TDD, or research only. Wait for their choice before starting the phase, then carry it into suggested next commands.
 
+When asking the user to choose a flow, read `$SKILLBASE/references/workflow-choice.md` and show its ASCII chart with the question.
+
 Create writes a new document; iterate updates an existing document in place using the user's feedback or resumes the workflow for a partially finished document.
 
 Load the matching process from `$SKILLBASE/references/<step>/process.md`:
