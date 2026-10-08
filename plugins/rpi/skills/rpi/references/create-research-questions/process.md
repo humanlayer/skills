@@ -1,0 +1,52 @@
+# Create Research Questions
+
+Turn the user's task into focused questions about how the current system works. These questions give the next research session its scope and starting points.
+
+Follow these steps in order.
+
+## 1. Read the Request
+
+Read the files and sources the user names in full. Preserve exact paths, package names, repository names, and URLs as context pointers for the research agent.
+
+Use the task directory and chosen flow established by `/rpi`.
+
+## 2. Check Enough Context to Ask Good Questions
+
+Do lightweight research to locate the relevant code and understand the request. Use subagents where useful:
+
+- `codebase-locator` finds related source files, configuration, and tests.
+- `codebase-analyzer` explains current behavior and interactions with file and line references.
+- `codebase-pattern-finder` finds related implementations and conventions.
+- `web-search-researcher` checks external web sources and library documentation when needed.
+
+If an Explore agent/tool is available, you can use that too.
+
+Use available web or library-documentation tools for external questions. When web access is unavailable, note that limit and continue with code and local documentation.
+
+Keep this pass small; the next research session does the full investigation.
+
+## 3. Draft Current-State Questions
+
+Ask what exists, where it lives, and how it works today. Cover the relevant behavior, data flow, tests, constraints, edge cases, and library capabilities. Frame each question as a descriptive question about the existing system, keeping future design choices for the design phase.
+
+Use concrete starting points: "In `packages/ui`, how does the theme reach shared components?" or "How does the worker recover queued jobs after a restart?"
+
+Usually write two to seven questions, with more when the task warrants it. Match the scope and depth to the task.
+
+For frontend work, include the existing design system: components, colors and hex codes, typography, spacing, borders, shadows, and theming. This gives later mockups the project's visual conventions.
+
+## 4. Read the Template and Save the Questions
+
+After reading the request and checking the context, read `$SKILLBASE/references/create-research-questions/references/research_questions_template.md`. When starting a change, also read `$SKILLBASE/references/create-research-questions/references/request_template.md` and save the original request in `NN-request-<description>.md` for later design and implementation sessions. Keep the user's desired result and exact source pointers there.
+
+Write `NN-research-questions-<description>.md` in the selected task directory, using the next available number and a short kebab-case description.
+
+Include context pointers when the request supplies them. Give the research session self-contained, neutral questions and concrete source pointers; keep the desired change in the separate request document so research stays objective.
+
+## 5. Read the Final-Answer Template and Respond
+
+Read `$SKILLBASE/references/create-research-questions/references/research_questions_final_answer.md` and respond using that template, filling in the saved file path, task directory, and chosen flow.
+
+Offer to open the document for review in VS Code, Cursor, or the user's preferred editor or browser.
+
+Finish this phase with the saved questions and suggested research command, then wait for the user's request to begin research.
