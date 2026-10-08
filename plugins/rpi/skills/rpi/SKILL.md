@@ -36,11 +36,15 @@ Update an existing document by default; create one when needed or requested. Whe
 
 ## Use the Task Directory
 
-Use the directory supplied by the user. Otherwise, use `.agents/artifacts/<branch-name>` with `/` replaced by `-`. On `main`, or when no branch identifies the task, ask for a task slug and wait for the user's answer. Reuse the directory or create it as needed.
+Use the directory supplied by the user.
+
+Otherwise, look for existing task directories in `.agents/artifacts/` whose names and workflow filenames match the request or current task branch. Reuse an obvious match without asking. If a directory looks close but could belong to a different task, or several directories look plausible, ask the user which to use before writing. Read only documents allowed by the selected phase when checking a match.
+
+When no existing directory fits, use `.agents/artifacts/<branch-name>` with `/` replaced by `-` if the branch identifies the task. On `main`, or when no branch identifies the task, choose a short kebab-case slug from the request and use `.agents/artifacts/<task-slug>` without asking for approval. State the selected path and reuse or create the directory as needed.
 
 Save at the selected path. If the sandbox blocks writes there, ask for scoped write access or a writable task directory and wait for the user's choice.
 
-Before writing artifacts, check `git check-ignore --quiet --no-index -- .agents/artifacts`. If the directory needs an ignore rule, add `.agents/artifacts/` to the repository's `.gitignore`. Treat Git errors separately from a path that needs an ignore rule.
+The RPI framework authors recommend not committing the artifacts.
 
 Number new workflow documents using the next available `NN-` prefix in the task directory. Keep the existing path when updating a document. Save supporting mockups and diagrams beside the documents and link them as ordinary local files.
 

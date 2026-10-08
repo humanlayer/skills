@@ -188,7 +188,6 @@ await test('flow-choice', async () => {
   const saved = report(cwd, 'research-questions')
   assert.equal(saved.metadata.flow, 'tdd')
   assert.ok(!saved.text.includes('Change retryDelay to capped exponential'), 'Questions remain objective')
-  assert.equal(await shell(cwd, ['git', 'check-ignore', '--quiet', '--no-index', '--', '.agents/artifacts']).then(() => true), true)
 })
 
 await test('standalone-research', async () => {
@@ -235,11 +234,46 @@ await test('research-isolation', async () => {
 
 await test('main-branch', async () => {
   const cwd = await fixture('main-branch', 'main')
-  const first = await turn(cwd, '/rpi research how retryDelay works', 'ask-slug')
-  assert.equal(documents(cwd, '.agents/artifacts/main').length, 0)
-  assert.match(first.text, /slug|name|directory|folder/i)
-  await turn(cwd, 'Use retry-investigation.', 'research', first.thread)
-  report(cwd, '-research-', '.agents/artifacts/retry-investigation')
+  const result = await turn(cwd, '/rpi research how retryDelay works', 'choose-slug')
+  const tasks = readdirSync(join(cwd, '.agents/artifacts'))
+  assert.equal(tasks.length, 1, 'Expected one task directory chosen from the request')
+  assert.match(tasks[0], /^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+  assert.notEqual(tasks[0], 'main', 'Used the branch name instead of a task slug')
+  assert.match(tasks[0], /retry/)
+  report(cwd, '-research-', `.agents/artifacts/${tasks[0]}`)
+  assert.ok(result.text.includes(tasks[0]), 'Selected task directory was not named')
+})
+
+await test('obvious-task-directory', async () => {
+  const cwd = await fixture('obvious-task-directory', 'main')
+  const directory = '.agents/artifacts/retry-delay'
+  artifact(cwd, '01-research-questions-retry.md', questions, directory)
+  artifact(cwd, '01-research-questions-theme.md', doc('research-questions', '# Theme Research\nHow are theme colors defined?'), '.agents/artifacts/theme-colors')
+  const result = await turn(cwd, '/rpi research how retryDelay works', 'reuse-task')
+  report(cwd, '-research-', directory)
+  assert.deepEqual(readdirSync(join(cwd, '.agents/artifacts')).sort(), ['retry-delay', 'theme-colors'])
+  assert.equal(documents(cwd, '.agents/artifacts/theme-colors').length, 1, 'Unrelated task was changed')
+  assert.match(result.text, /retry-delay/)
+})
+
+await test('ambiguous-task-directory', async () => {
+  const cwd = await fixture('ambiguous-task-directory', 'main')
+  const client = '.agents/artifacts/client-retry-delay'
+  const server = '.agents/artifacts/server-retry-delay'
+  artifact(cwd, '01-research-questions-retry.md', questions, client)
+  artifact(cwd, '01-research-questions-retry.md', questions, server)
+  const result = await turn(cwd, '/rpi research how retryDelay works', 'ask-task')
+  assert.deepEqual(readdirSync(join(cwd, '.agents/artifacts')).sort(), ['client-retry-delay', 'server-retry-delay'])
+  for (const directory of [client, server]) {
+    assert.deepEqual(documents(cwd, directory), ['01-research-questions-retry.md'], 'Wrote to an ambiguous task before asking')
+    assert.equal(readFileSync(join(cwd, directory, '01-research-questions-retry.md'), 'utf8'), questions)
+  }
+  assert.match(result.messages, /client-retry-delay/)
+  assert.match(result.messages, /server-retry-delay/)
+  assert.match(result.messages, /\?/)
+  await turn(cwd, 'Use server-retry-delay.', 'selected-task', result.thread)
+  report(cwd, '-research-', server)
+  assert.equal(documents(cwd, client).length, 1)
 })
 
 await test('explicit-directory', async () => {
