@@ -1,6 +1,7 @@
 ---
 name: improve-claude-md
 description: improve a CLAUDE.md file using <important if> blocks to improve instruction adherence
+disable-model-invocation: true
 ---
 
 When the user provides a CLAUDE.md file (or asks you to improve one), rewrite it following the principles and structure below.
