@@ -1,6 +1,6 @@
 ---
 name: improve-claude-md
-description: improve a CLAUDE.md file using <important if> blocks to improve instruction adherence
+description: Improve a CLAUDE.md file by wrapping rules in conditional "important if" blocks so Claude follows them more reliably. Use whenever the user wants to rewrite, tighten, audit, or restructure a CLAUDE.md (or similar agent instruction file), or complains that Claude keeps ignoring rules in it.
 ---
 
 When the user provides a CLAUDE.md file (or asks you to improve one), rewrite it following the principles and structure below.
