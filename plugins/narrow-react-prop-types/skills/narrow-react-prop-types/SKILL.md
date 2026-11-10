@@ -1,6 +1,7 @@
 ---
 name: narrow-react-prop-types
 description: narrow React component prop types to match live code paths
+disable-model-invocation: true
 ---
 
 # Narrow React Prop Types

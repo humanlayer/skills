@@ -1,6 +1,7 @@
 ---
 name: rpi
 description: Only use when the user explicitly invokes this skill by name.
+disable-model-invocation: true
 ---
 
 # Research, Design, and Implement

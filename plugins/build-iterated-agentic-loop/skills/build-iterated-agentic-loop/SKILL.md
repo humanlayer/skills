@@ -1,6 +1,7 @@
 ---
 name: build-iterated-agentic-loop
 description: build a repo-local skill and install a matching iterated coding-agent GitHub Actions workflow, prompt, memory file, and reference templates
+disable-model-invocation: true
 ---
 
 # Build Iterated Agentic Loop
