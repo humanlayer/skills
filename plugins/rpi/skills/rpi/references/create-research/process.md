@@ -8,7 +8,12 @@ Follow these steps in order.
 
 Use either a research-questions document or a direct question, such as `/rpi create research for how the electric collections connect to tanstack`. A direct question starts research immediately and produces one document answering that question. Match the depth to the question.
 
-When using a research-questions document, read it in full in the main context before delegating and use it as the whole task context. For a direct request, use the user's question and named sources. Read the current-system source files and documentation those inputs point to. Load the original request and desired-state design documents in later design and implementation sessions. Ask for a research question when neither research input is available.
+When using a research-questions document, read it in full in the main context before delegating and use it as the whole task context.
+Do not open the request document or any design document in this phase.
+If your instructions describe the desired change, stop before researching and say so: name what leaked (the goal, a pending change, a request document), and ask the human or orchestrator to relaunch research in a fresh agent or session with only the research-questions document.
+Before saving, check that the research describes only what exists today: no desired change, no open questions about what the user wants.
+
+For a direct request, use the user's question and named sources. Read the current-system source files and documentation those inputs point to. Load the original request and desired-state design documents in later design and implementation sessions. Ask for a research question when neither research input is available.
 
 Carry the chosen flow from the question document or invocation into the handoff when one exists. A standalone research answer finishes with the saved document and an invitation for follow-up questions.
 
