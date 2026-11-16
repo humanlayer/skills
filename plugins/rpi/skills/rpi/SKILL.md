@@ -79,3 +79,17 @@ REFERENCE_CONTENTS
 YOUR_MESSAGE ON WHAT TO LOOK FOR OR BUILD
 </message>
 </important>
+
+## Delegate Phases
+
+When handing a phase to another agent or session:
+- Give each phase its own fresh agent. Never let the agent that wrote the request or questions also run research.
+- Pass only the documents that phase may read (see the table below), plus the task directory and the phase name. Don't summarize the task, the user's goal, or what the user has or hasn't said.
+- Don't mention the request document, or that a desired change exists, to a research agent.
+
+| Phase | May read |
+| --- | --- |
+| Research questions | the user's message and named sources |
+| Research | the research-questions document and the sources it points to |
+| Design / PRD / TDD | request, research, earlier design documents |
+| Outline / Implement | everything |

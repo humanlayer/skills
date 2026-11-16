@@ -39,6 +39,9 @@ For frontend work, include the existing design system: components, colors and he
 
 After reading the request and checking the context, read `$SKILLBASE/references/create-research-questions/references/research_questions_template.md`. When starting a change, also read `$SKILLBASE/references/create-research-questions/references/request_template.md` and save the original request in `NN-request-<description>.md` for later design and implementation sessions. Keep the user's desired result and exact source pointers there.
 
+The session that talks to the user writes the request document. A delegated questions agent receives the questions task only, not the request.
+If the user hasn't described the change yet, skip the request document. Don't write a placeholder for it.
+
 Write `NN-research-questions-<description>.md` in the selected task directory, using the next available number and a short kebab-case description.
 
 Include context pointers when the request supplies them. Give the research session self-contained, neutral questions and concrete source pointers; keep the desired change in the separate request document so research stays objective.

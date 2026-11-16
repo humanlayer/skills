@@ -52,7 +52,10 @@ The user can start at any step. After research or any design step, they can choo
 
 ## Documents Carry Context Between Sessions
 
-Use a separate context window for each phase by default. Save current decisions, user approvals, and unfinished questions in the document before handing off. Each next command includes the task directory and chosen flow, for example:
+Use a separate context window for each phase by default.
+This holds even when one instruction covers several phases ("do questions and research"): run them in sequence with a fresh agent or session per phase, and hand off through the saved documents only.
+
+Save current decisions, user approvals, and unfinished questions in the document before handing off. Each next command includes the task directory and chosen flow, for example:
 
 ```text
 /rpi research .agents/artifacts/task-retries; next: PRD then TDD
